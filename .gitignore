@@ -1,0 +1,59 @@
+# Tệp build và tạm thời
+*.apk
+*.ap_
+*.aab
+build/
+captures/
+output.json
+
+# Tệp Gradle
+.gradle/
+local.properties
+
+# Tệp IDE (Android Studio)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Tệp tạm và cache
+*.log
+*.tmp
+*.bak
+*.swp
+*~.nib
+.DS_Store
+Thumbs.db
+
+# Thông tin nhạy cảm
+secrets.properties
+google-services.json
+keystore.properties
+*.jks
+*.keystore
+
+# Tệp môi trường
+.env
+.env.local
+
+# Tệp SQLite/Room
+*.db
+*.db-shm
+*.db-wal
+
+# Tệp cá nhân hóa
+user-specific/
+*.user
+
+# Tệp debug
+bin/
+gen/
+out/
+
+# Tệp navigation
+nav_graph.xml.bak
+
+# Tệp test và coverage
+*.exec
+*.ec
+coverage/
