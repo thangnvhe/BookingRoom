@@ -2,6 +2,8 @@ package com.thangnvhe.bookingroom.ui.packages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import com.thangnvhe.bookingroom.R;
 import com.thangnvhe.bookingroom.data.db.entities.Package;
 import com.thangnvhe.bookingroom.data.repositories.PackageRepository;
 import com.thangnvhe.bookingroom.ui.adapter.PackageAdapter;
+import com.thangnvhe.bookingroom.ui.auth.LoginActivity;
 
 import java.util.List;
 
@@ -31,12 +34,24 @@ public class PackageListActivity extends AppCompatActivity {
         viewModel.getPackages(new PackageRepository.OnPackageResultListener() {
             @Override
             public void onSuccess(List<Package> packages) {
-                adapter = new PackageAdapter(packages, pkg -> {
-                    Intent intent = new Intent(PackageListActivity.this, PackageDetailActivity.class);
-                    intent.putExtra("PACKAGE_ID", pkg.id);
-                    startActivity(intent);
+                runOnUiThread(() -> {
+                    TextView emptyTextView = findViewById(R.id.emptyTextView);
+
+                    if (packages == null || packages.isEmpty()) {
+                        emptyTextView.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        emptyTextView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+
+                        adapter = new PackageAdapter(packages, pkg -> {
+                            Intent intent = new Intent(PackageListActivity.this, PackageDetailActivity.class);
+                            intent.putExtra("PACKAGE_ID", pkg.id);
+                            startActivity(intent);
+                        });
+                        recyclerView.setAdapter(adapter);
+                    }
                 });
-                recyclerView.setAdapter(adapter);
             }
         });
     }
