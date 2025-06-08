@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+
         viewModel = new AuthViewModel(this);
 
         // Kiểm tra đăng nhập
@@ -30,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Khởi tạo màn hình chính (ví dụ: điều hướng đến PackageListActivity)
-        startActivity(new Intent(this, PackageListActivity.class));
+//        startActivity(new Intent(this, PackageListActivity.class));
     }
 
     @Override

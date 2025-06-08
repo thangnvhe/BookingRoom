@@ -51,14 +51,18 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(int userId) {
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, PackageListActivity.class));
-                        finish();
+                        runOnUiThread(() -> {
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, PackageListActivity.class));
+                            finish();
+                        });
                     }
 
                     @Override
                     public void onError(String message) {
-                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                        runOnUiThread(() -> {
+                            Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                        });
                     }
                 });
             }
