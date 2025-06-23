@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
+import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -81,6 +81,17 @@ public class RegisterActivity extends AppCompatActivity {
             User user = new User(fullName, email, username, password, phone, gender, dob, address);
             userViewModel.registerUser(user);
         });
+
+        Button btnBackToLogin = findViewById(R.id.btnBtoLogin);
+        btnBackToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish(); // kết thúc RegisterActivity nếu không muốn quay lại bằng nút back
+            }
+        });
+
     }
 
     private String getSelectedGender() {
