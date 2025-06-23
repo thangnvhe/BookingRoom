@@ -28,4 +28,8 @@ public class UserRepository {
     public User getUserByUsername(String username) {
         return userDao.getUserByUsername(username);
     }
+
+    public User getUserByUsernameAndPassword(String username, String password) {
+        return userDao.getUserByUsernameAndPassword(username, password);
+    }
 }
