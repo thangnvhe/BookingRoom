@@ -13,6 +13,12 @@
         android:theme="@style/Theme.BookingRoom"
         tools:targetApi="31">
         <activity
+            android:name=".ui.packages.PackageDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.packages.PackagesListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.auth.ProfileActivity"
             android:exported="false" />
         <activity

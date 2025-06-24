@@ -1,11 +1,10 @@
-package com.thangnvhe.bookingroom.ui;
+package com.thangnvhe.bookingroom.ui.packages;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,14 +13,22 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.thangnvhe.bookingroom.R;
+import com.thangnvhe.bookingroom.data.AppDatabase;
+import com.thangnvhe.bookingroom.data.db.relations.SampleData;
+import com.thangnvhe.bookingroom.ui.adapter.PackageAdapter;
 import com.thangnvhe.bookingroom.ui.auth.LoginActivity;
 import com.thangnvhe.bookingroom.ui.auth.ProfileActivity;
-import com.thangnvhe.bookingroom.ui.packages.PackagesListActivity;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.concurrent.Executors;
 
+public class PackagesListActivity extends AppCompatActivity {
+    private PackageViewModel viewModel;
+    private PackageAdapter adapter;
     private static final String PREFS_NAME = "user_prefs";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static final String KEY_IS_USER_NAME = "is_user_name";
@@ -30,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-
-        // Xử lý insets
+        setContentView(R.layout.activity_packages_list);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -43,21 +48,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Kiểm tra đăng nhập
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isLoggedIn = prefs.getBoolean(KEY_IS_LOGGED_IN, false);
-        String isUserName = prefs.getString(KEY_IS_USER_NAME, null);
-        if (!isLoggedIn && isUserName != null) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish(); // Không cho quay lại MainActivity khi chưa login
-        }
+        // Thiết lập RecyclerView
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewPackages);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new PackageAdapter(this);
+        recyclerView.setAdapter(adapter);
 
-        LinearLayout lnHome = findViewById(R.id.ln_home);
-        lnHome.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, PackagesListActivity.class);
-            startActivity(intent);
+        // Khởi tạo ViewModel
+        viewModel = new ViewModelProvider(this).get(PackageViewModel.class);
+
+        // Quan sát danh sách Package
+        viewModel.getAllPackages().observe(this, packages -> {
+            if (packages.isEmpty()) {
+                // Nếu danh sách rỗng, insert dữ liệu mẫu
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    AppDatabase db = AppDatabase.getInstance(this);
+                    SampleData.insertSampleData(db);
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Đã thêm dữ liệu mẫu", Toast.LENGTH_SHORT).show();
+                    });
+                });
+            }
+            // Luôn cập nhật lên RecyclerView
+            adapter.setPackages(packages);
         });
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     // Gắn menu
@@ -72,12 +86,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_logout) {
-            // Đăng xuất
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply();
 
             Toast.makeText(this, "Đã đăng xuất!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(PackagesListActivity.this, LoginActivity.class));
             finish();
             return true;
 
@@ -86,11 +99,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
 
         } else if (id == R.id.menu_cart) {
-            //startActivity(new Intent(MainActivity.this, CartActivity.class));
+            // TODO: Mở giỏ hàng
             return true;
 
         } else if (id == R.id.menu_profile) {
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            startActivity(new Intent(PackagesListActivity.this, ProfileActivity.class));
             return true;
         }
 
