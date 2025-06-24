@@ -1,5 +1,6 @@
 package com.thangnvhe.bookingroom.data.db.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -20,5 +21,4 @@ public interface UserDao {
     User getUserByUsername(String username);
     @Query("SELECT * FROM users WHERE username = :username AND password = :password LIMIT 1")
     User getUserByUsernameAndPassword(String username, String password);
-
 }

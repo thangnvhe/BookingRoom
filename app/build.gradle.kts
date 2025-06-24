@@ -49,6 +49,8 @@ dependencies {
     testImplementation("androidx.room:room-testing:$room_version")
     implementation("androidx.room:room-paging:$room_version")
 
+    implementation("de.hdodenhof:circleimageview:3.1.0") // ✅ Đúng cú pháp Kotlin DSL
+
     // Libraries khác
     implementation(libs.appcompat)
     implementation(libs.material)

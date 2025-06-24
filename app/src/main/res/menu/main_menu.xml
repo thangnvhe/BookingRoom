@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Nút Cart luôn hiện -->
     <item
-        android:id="@+id/menu_logout"
-        android:title="Đăng xuất"
-        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:id="@+id/menu_cart"
+        android:title="Giỏ hàng"
+        android:icon="@android:drawable/ic_menu_view"
+        app:showAsAction="ifRoom" />
+
+    <!-- Nút Profile trong overflow -->
+    <item
+        android:id="@+id/menu_profile"
+        android:title="Hồ sơ cá nhân"
+        android:icon="@android:drawable/ic_menu_myplaces"
         app:showAsAction="never" />
 
+    <!-- Nút Cài đặt -->
     <item
         android:id="@+id/menu_settings"
         android:title="Cài đặt"
         android:icon="@android:drawable/ic_menu_preferences"
+        app:showAsAction="never" />
+
+    <!-- Nút Đăng xuất -->
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Đăng xuất"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
         app:showAsAction="never" />
 </menu>

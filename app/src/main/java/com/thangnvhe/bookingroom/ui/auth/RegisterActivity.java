@@ -62,7 +62,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        // Xử lý đăng ký khi bấm nút
         btnRegister.setOnClickListener(v -> {
             String fullName = etFullName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
@@ -73,14 +72,51 @@ public class RegisterActivity extends AppCompatActivity {
             String dob = etDob.getText().toString().trim();
             String address = etAddress.getText().toString().trim();
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập tên đăng nhập và mật khẩu", Toast.LENGTH_SHORT).show();
+            if (fullName.isEmpty()) {
+                etFullName.setError("Vui lòng nhập họ tên");
+                etFullName.requestFocus();
+                return;
+            }
+            if (email.isEmpty()) {
+                etEmail.setError("Vui lòng nhập email");
+                etEmail.requestFocus();
+                return;
+            }
+            if (username.isEmpty()) {
+                etUsername.setError("Vui lòng nhập tên đăng nhập");
+                etUsername.requestFocus();
+                return;
+            }
+            if (password.isEmpty()) {
+                etPassword.setError("Vui lòng nhập mật khẩu");
+                etPassword.requestFocus();
+                return;
+            }
+            if (phone.isEmpty()) {
+                etPhone.setError("Vui lòng nhập số điện thoại");
+                etPhone.requestFocus();
+                return;
+            }
+            if (gender.isEmpty()) {
+                Toast.makeText(this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (dob.isEmpty()) {
+                etDob.setError("Vui lòng chọn ngày sinh");
+                etDob.requestFocus();
+                return;
+            }
+            if (address.isEmpty()) {
+                etAddress.setError("Vui lòng nhập địa chỉ");
+                etAddress.requestFocus();
                 return;
             }
 
+            // Tạo User và gửi ViewModel
             User user = new User(fullName, email, username, password, phone, gender, dob, address);
             userViewModel.registerUser(user);
         });
+
 
         Button btnBackToLogin = findViewById(R.id.btnBtoLogin);
         btnBackToLogin.setOnClickListener(new View.OnClickListener() {

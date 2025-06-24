@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.thangnvhe.bookingroom.R;
 import com.thangnvhe.bookingroom.ui.auth.LoginActivity;
+import com.thangnvhe.bookingroom.ui.auth.ProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish(); // Không cho quay lại MainActivity khi chưa login
         }
-
-        // Nếu đã login thì tiếp tục ở lại MainActivity
     }
 
     // Gắn menu
@@ -61,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
     // Xử lý click menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_logout) {
+        int id = item.getItemId();
+        if (id == R.id.menu_logout) {
             // Đăng xuất
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply();
@@ -70,10 +70,20 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
             return true;
-        } else if (item.getItemId() == R.id.menu_settings) {
+
+        } else if (id == R.id.menu_settings) {
             Toast.makeText(this, "Chức năng cài đặt sẽ được thêm sau!", Toast.LENGTH_SHORT).show();
             return true;
+
+        } else if (id == R.id.menu_cart) {
+            //startActivity(new Intent(MainActivity.this, CartActivity.class));
+            return true;
+
+        } else if (id == R.id.menu_profile) {
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 }

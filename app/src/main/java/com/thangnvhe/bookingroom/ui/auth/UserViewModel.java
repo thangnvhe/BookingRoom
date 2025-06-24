@@ -41,14 +41,12 @@ public class UserViewModel extends ViewModel {
             if (user != null) {
                 // Lưu trạng thái đăng nhập
                 SharedPreferences prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-                prefs.edit().putBoolean("is_logged_in", true).apply();
-
+                prefs.edit().putBoolean("is_logged_in", true).putString("is_user_name",username).apply();
                 loginResult.postValue("success");
             } else {
                 loginResult.postValue("Sai tên đăng nhập hoặc mật khẩu");
             }
         }).start();
     }
-
 }
 
