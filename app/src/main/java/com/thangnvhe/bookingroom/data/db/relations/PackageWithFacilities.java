@@ -6,10 +6,11 @@ import androidx.room.Relation;
 import com.thangnvhe.bookingroom.data.db.entities.FacilityEntity;
 import com.thangnvhe.bookingroom.data.db.entities.PackageEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 // Tạo trong thư mục: com.yourapp.model hoặc com.yourapp.data.model
-public class PackageWithFacilities {
+public class PackageWithFacilities implements Serializable {
     @Embedded
     public PackageEntity packageEntity;
 

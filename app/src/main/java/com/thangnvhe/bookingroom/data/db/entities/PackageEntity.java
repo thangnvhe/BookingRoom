@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "packages")
-public class PackageEntity {
+public class PackageEntity implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     public int id;

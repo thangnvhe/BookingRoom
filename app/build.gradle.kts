@@ -50,6 +50,10 @@ dependencies {
     implementation("androidx.room:room-paging:$room_version")
 
     implementation("de.hdodenhof:circleimageview:3.1.0") // ✅ Đúng cú pháp Kotlin DSL
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+    implementation ("com.google.android.flexbox:flexbox:3.0.0")
+
 
     // Libraries khác
     implementation(libs.appcompat)

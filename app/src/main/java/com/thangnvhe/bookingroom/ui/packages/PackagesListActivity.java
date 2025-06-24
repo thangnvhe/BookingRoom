@@ -19,11 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thangnvhe.bookingroom.R;
 import com.thangnvhe.bookingroom.data.AppDatabase;
+import com.thangnvhe.bookingroom.data.db.entities.FacilityEntity;
 import com.thangnvhe.bookingroom.data.db.relations.SampleData;
+import com.thangnvhe.bookingroom.ui.MainActivity;
 import com.thangnvhe.bookingroom.ui.adapter.PackageAdapter;
 import com.thangnvhe.bookingroom.ui.auth.LoginActivity;
 import com.thangnvhe.bookingroom.ui.auth.ProfileActivity;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 public class PackagesListActivity extends AppCompatActivity {
@@ -47,6 +50,12 @@ public class PackagesListActivity extends AppCompatActivity {
         // Gắn Toolbar nếu có
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Hiện icon trái
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_left); // Icon bạn chọn
+        }
+
 
         // Thiết lập RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPackages);
@@ -72,6 +81,19 @@ public class PackagesListActivity extends AppCompatActivity {
             // Luôn cập nhật lên RecyclerView
             adapter.setPackages(packages);
         });
+
+        adapter.setOnItemClickListener(item -> {
+            Intent intent = new Intent(PackagesListActivity.this, PackageDetailActivity.class);
+            ArrayList<String> facilityNames = new ArrayList<>();
+            for (FacilityEntity f : item.facilities) {
+                facilityNames.add(f.name);
+            }
+            intent.putExtra("facility_names", facilityNames);
+            intent.putExtra("package", item.packageEntity);
+            // Đảm bảo PackageEntity implements Serializable
+            startActivity(intent);
+        });
+
     }
 
     // Gắn menu
@@ -104,6 +126,11 @@ public class PackagesListActivity extends AppCompatActivity {
 
         } else if (id == R.id.menu_profile) {
             startActivity(new Intent(PackagesListActivity.this, ProfileActivity.class));
+            return true;
+        }
+        if (item.getItemId() == android.R.id.home) {
+            // Quay lại MainActivity
+            startActivity(new Intent(PackagesListActivity.this, MainActivity.class));
             return true;
         }
 

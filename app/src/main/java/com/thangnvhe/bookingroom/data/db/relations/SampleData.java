@@ -26,16 +26,16 @@ public class SampleData {
         };
 
         String[] imageUrls = {
-                "https://example.com/image1.png",
-                "https://example.com/image2.png",
-                "https://example.com/image3.png",
-                "https://example.com/image4.png",
-                "https://example.com/image5.png",
-                "https://example.com/image6.png",
-                "https://example.com/image7.png",
-                "https://example.com/image8.png",
-                "https://example.com/image9.png",
-                "https://example.com/image10.png"
+                "img_ghe_don",
+                "img_ghe_doi",
+                "img_ban_tu_cho",
+                "img_ban_sau_cho",
+                "img_ghe_vip",
+                "img_ban_mot_hai_nguoi",
+                "img_ban_hoi_ngh",
+                "img_ghe_sofa",
+                "img_ban_goc",
+                "img_ban_ket_noi"
         };
 
         String[] types = {

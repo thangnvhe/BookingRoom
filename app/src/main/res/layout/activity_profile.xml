@@ -279,25 +279,4 @@
         app:layout_constraintTop_toTopOf="@+id/options_layout"
         app:layout_constraintVertical_bias="0.989" />
 
-    <Button
-        android:id="@+id/btn_change_password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="#2767E4"
-        android:minHeight="55dp"
-        android:text="Change Password"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/options_layout"
-        app:layout_constraintVertical_bias="0.866" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

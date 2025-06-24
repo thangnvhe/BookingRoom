@@ -21,6 +21,17 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
     private List<PackageWithFacilities> packages = new ArrayList<>();
     private final Context context;
 
+    // Interface xử lý click
+    public interface OnItemClickListener {
+        void onItemClick(PackageWithFacilities item);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public PackageAdapter(Context context) {
         this.context = context;
     }
@@ -41,12 +52,29 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
     public void onBindViewHolder(@NonNull PackageViewHolder holder, int position) {
         PackageWithFacilities item = packages.get(position);
         holder.name.setText(item.packageEntity.name);
-        holder.capacity.setText("Chỗ: " + String.valueOf(item.packageEntity.capacity));
-        holder.price.setText(String.valueOf(item.packageEntity.price) + " VNĐ / Đêm");
+        holder.capacity.setText("Chỗ: " + item.packageEntity.capacity);
+        holder.price.setText(item.packageEntity.price + " VNĐ / Đêm");
 
-        // Tạm thời ảnh là cố định (bạn có thể chỉnh theo dữ liệu sau)
-        holder.image.setImageResource(R.drawable.ic_nu);
+        // Load ảnh từ drawable theo imageUrl
+        int imageResId = context.getResources().getIdentifier(
+                item.packageEntity.imageUrl,
+                "drawable",
+                context.getPackageName()
+        );
+
+        if (imageResId != 0) {
+            holder.image.setImageResource(imageResId);
+        } else {
+            holder.image.setImageResource(R.drawable.placeholder);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(item);
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
