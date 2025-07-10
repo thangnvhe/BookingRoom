@@ -9,22 +9,25 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.thangnvhe.bookingroom.data.db.dao.FacilityDao;
+import com.thangnvhe.bookingroom.data.db.dao.MessageDao;
 import com.thangnvhe.bookingroom.data.db.dao.PackageDao;
 import com.thangnvhe.bookingroom.data.db.dao.UserDao;
 import com.thangnvhe.bookingroom.data.db.entities.FacilityEntity;
+import com.thangnvhe.bookingroom.data.db.entities.MessageEntity;
 import com.thangnvhe.bookingroom.data.db.entities.PackageEntity;
 import com.thangnvhe.bookingroom.data.db.entities.User;
 import com.thangnvhe.bookingroom.data.db.relations.SampleData;
 
 import java.util.concurrent.Executors;
 
-@Database(entities = {User.class, PackageEntity.class, FacilityEntity.class}, version = 2, exportSchema = false)
+@Database(entities = {User.class, PackageEntity.class, FacilityEntity.class, MessageEntity.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     public abstract UserDao userDao();
     public abstract PackageDao packageDao();
     public abstract FacilityDao facilityDao();
+    public abstract MessageDao messageDao();
 
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -34,16 +37,16 @@ public abstract class AppDatabase extends RoomDatabase {
                                     context.getApplicationContext(),
                                     AppDatabase.class,
                                     "app_database"
-                            ).fallbackToDestructiveMigration()
+                            ).fallbackToDestructiveMigration() // Xóa dữ liệu cũ khi tăng version
                             .addCallback(new Callback() {
-                        @Override
-                        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                            super.onCreate(db);
-                            Executors.newSingleThreadExecutor().execute(() -> {
-                                SampleData.insertSampleData(getInstance(context));
-                            });
-                                 }
-                             })
+                                @Override
+                                public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                    super.onCreate(db);
+                                    Executors.newSingleThreadExecutor().execute(() -> {
+                                        SampleData.insertSampleData(getInstance(context));
+                                    });
+                                }
+                            })
                             .build();
                 }
             }
