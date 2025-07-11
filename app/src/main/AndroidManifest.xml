@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,41 +15,37 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BookingRoom"
         tools:targetApi="31">
+
+        <!-- Nếu bạn không dùng Maps SDK thì có thể xoá dòng dưới -->
+        <!--
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDp6I5SkORGtCD1xoXgs0lHbD0qHU4Bpgc" />
+        -->
+
         <activity android:name=".ui.cart.CartActivity" />
         <activity android:name=".ui.ActivityBooking" />
         <activity android:name=".ui.HistoryActivity" />
-        <activity
-            android:name=".ui.packages.PackageDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.packages.PackagesListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.auth.ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.auth.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.auth.LoginActivity"
-            android:exported="true">
+
+        <activity android:name=".ui.packages.PackageDetailActivity" android:exported="false" />
+        <activity android:name=".ui.packages.PackagesListActivity" android:exported="false" />
+        <activity android:name=".ui.auth.ProfileActivity" android:exported="false" />
+        <activity android:name=".ui.auth.RegisterActivity" android:exported="false" />
+        <activity android:name=".ui.auth.EditProfileActivity" android:exported="false" />
+        <activity android:name=".ui.map.MapActivity" android:exported="false" />
+        <activity android:name=".ui.MainActivity" android:exported="false" />
+
+        <activity android:name=".ui.auth.LoginActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.chat.ChatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.chat.SellerChatListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.chat.SellerChatActivity"
-            android:exported="false" />
+
+        <activity android:name=".ui.chat.ChatActivity" android:exported="false" />
+        <activity android:name=".ui.chat.SellerChatListActivity" android:exported="false" />
+        <activity android:name=".ui.chat.SellerChatActivity" android:exported="false" />
+
     </application>
 
 </manifest>
