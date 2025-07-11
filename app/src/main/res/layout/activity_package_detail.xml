@@ -156,6 +156,17 @@
                 android:minHeight="48dp"
                 android:spinnerMode="dropdown" />
 
+            <Button
+                android:id="@+id/addToCartButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thêm vào giỏ hàng"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#FF5722"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:padding="12dp" />
 
         </LinearLayout>
     </ScrollView>
