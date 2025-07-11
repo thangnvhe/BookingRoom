@@ -85,12 +85,17 @@ public class PackagesListActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(item -> {
             Intent intent = new Intent(PackagesListActivity.this, PackageDetailActivity.class);
             ArrayList<String> facilityNames = new ArrayList<>();
+            facilityNames.add("không chọn tiện ích" + " (" + 0 + ")");
             for (FacilityEntity f : item.facilities) {
-                facilityNames.add(f.name);
+                // Tạo chuỗi dạng "tên (ID)", ví dụ: "TV (1)"
+                facilityNames.add(f.name + " (" + f.id + ")");
+            }
+            // Nếu không có tiện ích, thêm tùy chọn mặc định
+            if (facilityNames.isEmpty()) {
+                facilityNames.add("Không có tiện ích kèm theo");
             }
             intent.putExtra("facility_names", facilityNames);
             intent.putExtra("package", item.packageEntity);
-            // Đảm bảo PackageEntity implements Serializable
             startActivity(intent);
         });
 
