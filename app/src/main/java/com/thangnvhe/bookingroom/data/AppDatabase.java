@@ -25,7 +25,7 @@ import com.thangnvhe.bookingroom.data.db.relations.SampleData;
 import java.util.concurrent.Executors;
 
 
-@Database(entities = {User.class, PackageEntity.class, FacilityEntity.class, CartItem.class, Booking.class}, version = 8, exportSchema = false)
+@Database(entities = {User.class, PackageEntity.class, FacilityEntity.class, CartItem.class, Booking.class, MessageEntity.class}, version = 9, exportSchema = false)
 
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
@@ -38,6 +38,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CartDao cartDao();
     public abstract BookingDao bookingDao();
+
 
 
     public static AppDatabase getInstance(Context context) {
