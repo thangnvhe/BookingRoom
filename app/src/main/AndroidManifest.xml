@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BookingRoom"
         tools:targetApi="31">
+        <activity android:name=".ui.cart.CartActivity" />
+        <activity android:name=".ui.ActivityBooking" />
+        <activity android:name=".ui.HistoryActivity" />
         <activity
             android:name=".ui.packages.PackageDetailActivity"
             android:exported="false" />
