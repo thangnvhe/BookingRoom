@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.thangnvhe.bookingroom.R;
 import com.thangnvhe.bookingroom.ui.auth.LoginActivity;
 import com.thangnvhe.bookingroom.ui.auth.ProfileActivity;
+import com.thangnvhe.bookingroom.ui.map.MapActivity;
 import com.thangnvhe.bookingroom.ui.packages.PackagesListActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, PackagesListActivity.class);
             startActivity(intent);
         });
+
+        CardView cardMap = findViewById(R.id.cardMap);
+        cardMap.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            startActivity(intent);
+        });
+
+
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
