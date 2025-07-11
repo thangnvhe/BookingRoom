@@ -21,4 +21,8 @@ public interface PackageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertPackage(PackageEntity packageEntity);
+
+    @Query("SELECT name FROM packages WHERE id = :id LIMIT 1")
+    String getPackageNameById(int id);
+
 }

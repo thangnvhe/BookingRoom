@@ -29,6 +29,11 @@ public class UserRepository {
         return userDao.getUserByUsername(username);
     }
 
+    public int getUserIdByUsername(String username) {
+        User user = userDao.getUserByUsername(username);
+        return user != null ? user.id : -1;
+    }
+
     public User getUserByUsernameAndPassword(String username, String password) {
         return userDao.getUserByUsernameAndPassword(username, password);
     }

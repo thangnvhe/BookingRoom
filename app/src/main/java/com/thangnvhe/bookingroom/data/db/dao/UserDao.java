@@ -21,4 +21,5 @@ public interface UserDao {
     User getUserByUsername(String username);
     @Query("SELECT * FROM users WHERE username = :username AND password = :password LIMIT 1")
     User getUserByUsernameAndPassword(String username, String password);
+
 }
