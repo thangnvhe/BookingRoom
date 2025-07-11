@@ -21,6 +21,7 @@ import com.thangnvhe.bookingroom.R;
 import com.thangnvhe.bookingroom.data.db.entities.CartItem;
 import com.thangnvhe.bookingroom.ui.auth.LoginActivity;
 import com.thangnvhe.bookingroom.ui.auth.ProfileActivity;
+import com.thangnvhe.bookingroom.ui.map.MapActivity;
 import com.thangnvhe.bookingroom.ui.cart.CartActivity;
 import com.thangnvhe.bookingroom.ui.chat.ChatActivity;
 import com.thangnvhe.bookingroom.ui.chat.SellerChatListActivity;
@@ -42,37 +43,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Set padding để hỗ trợ hệ thống thanh trạng thái
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Thiết lập Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Lấy SharedPreferences
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isLoggedIn = prefs.getBoolean(KEY_IS_LOGGED_IN, false);
         String username = prefs.getString(KEY_IS_USER_NAME, null);
         String userRole = prefs.getString(KEY_USER_ROLE, "user");
 
-        // Kiểm tra trạng thái đăng nhập
         if (!isLoggedIn || username == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish();
             return;
         }
 
-        // Khởi tạo ViewModel
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
-
-        // Kiểm tra giỏ hàng nếu có sản phẩm
         checkCartItems(username);
 
-        // Giao diện & xử lý click
         LinearLayout lnHome = findViewById(R.id.ln_home);
         lnHome.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, PackagesListActivity.class));
@@ -93,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = "seller".equals(userRole) ?
                     new Intent(MainActivity.this, SellerChatListActivity.class)
                     : new Intent(MainActivity.this, ChatActivity.class);
+            startActivity(intent);
+        });
+
+        CardView cardMap = findViewById(R.id.cardMap);
+        cardMap.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
             startActivity(intent);
         });
 
