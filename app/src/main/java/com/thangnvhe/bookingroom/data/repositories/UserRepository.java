@@ -17,8 +17,8 @@ public class UserRepository {
         userDao = db.userDao();
     }
 
-    public void insert(User user) {
-        Executors.newSingleThreadExecutor().execute(() -> userDao.insert(user));
+    public void insertUser(User user) {
+        Executors.newSingleThreadExecutor().execute(() -> userDao.insertUser(user));
     }
 
     public List<User> getAllUsers() {

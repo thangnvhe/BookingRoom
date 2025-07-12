@@ -9,7 +9,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
+import androidx.cardview.widget.CardView; // Thêm import
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean isLoggedIn = prefs.getBoolean(KEY_IS_LOGGED_IN, false);
         String isUserName = prefs.getString(KEY_IS_USER_NAME, null);
-        String userRole = prefs.getString(KEY_USER_ROLE, "user"); // Mặc định là user
+        String userRole = prefs.getString(KEY_USER_ROLE, "user");
 
         if (!isLoggedIn || isUserName == null) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));

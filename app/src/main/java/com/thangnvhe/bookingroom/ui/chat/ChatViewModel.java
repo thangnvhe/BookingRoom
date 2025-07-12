@@ -42,7 +42,7 @@ public class ChatViewModel extends AndroidViewModel {
 
         new Thread(() -> {
             try {
-                Thread.sleep(6000);
+                Thread.sleep(2000);
                 MessageEntity reply = new MessageEntity("seller", "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm.", System.currentTimeMillis(), userId);
                 repository.insertMessage(reply);
             } catch (InterruptedException e) {
