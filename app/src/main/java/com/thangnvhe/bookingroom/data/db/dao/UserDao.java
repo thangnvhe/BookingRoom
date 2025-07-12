@@ -1,10 +1,9 @@
 package com.thangnvhe.bookingroom.data.db.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update; // <- THÊM dòng này nếu chưa có
+import androidx.room.Update;
 
 import com.thangnvhe.bookingroom.data.db.entities.User;
 
@@ -12,8 +11,9 @@ import java.util.List;
 
 @Dao
 public interface UserDao {
+
     @Insert
-    void insert(User user);
+    void insertUser(User user);  // Gộp tên insert cho rõ ràng
 
     @Query("SELECT * FROM users")
     List<User> getAllUsers();
@@ -25,5 +25,5 @@ public interface UserDao {
     User getUserByUsernameAndPassword(String username, String password);
 
     @Update
-    void update(User user);
+    void updateUser(User user);  // Tên rõ ràng hơn
 }

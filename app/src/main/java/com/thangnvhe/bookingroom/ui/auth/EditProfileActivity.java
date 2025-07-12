@@ -118,7 +118,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 user.address = address;
                 user.password = password;
 
-                userDao.update(user);
+                userDao.updateUser(user); // Sửa từ update thành updateUser
 
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
