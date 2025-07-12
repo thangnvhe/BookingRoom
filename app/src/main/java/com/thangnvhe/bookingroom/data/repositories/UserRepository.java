@@ -17,8 +17,9 @@ public class UserRepository {
         userDao = db.userDao();
     }
 
-    public void insert(User user) {
-        Executors.newSingleThreadExecutor().execute(() -> userDao.insert(user));
+    // Dùng insertUser để nhất quán với UserDao
+    public void insertUser(User user) {
+        Executors.newSingleThreadExecutor().execute(() -> userDao.insertUser(user));
     }
 
     public List<User> getAllUsers() {
@@ -29,12 +30,12 @@ public class UserRepository {
         return userDao.getUserByUsername(username);
     }
 
+    public User getUserByUsernameAndPassword(String username, String password) {
+        return userDao.getUserByUsernameAndPassword(username, password);
+    }
+
     public int getUserIdByUsername(String username) {
         User user = userDao.getUserByUsername(username);
         return user != null ? user.id : -1;
-    }
-
-    public User getUserByUsernameAndPassword(String username, String password) {
-        return userDao.getUserByUsernameAndPassword(username, password);
     }
 }

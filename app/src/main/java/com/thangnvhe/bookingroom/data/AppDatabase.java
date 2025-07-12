@@ -24,22 +24,29 @@ import com.thangnvhe.bookingroom.data.db.relations.SampleData;
 
 import java.util.concurrent.Executors;
 
-
-@Database(entities = {User.class, PackageEntity.class, FacilityEntity.class, CartItem.class, Booking.class, MessageEntity.class}, version = 9, exportSchema = false)
-
+@Database(
+        entities = {
+                User.class,
+                PackageEntity.class,
+                FacilityEntity.class,
+                MessageEntity.class,
+                CartItem.class,
+                Booking.class
+        },
+        version = 9, // Đảm bảo đây là version mới nhất bạn dùng
+        exportSchema = false
+)
 public abstract class AppDatabase extends RoomDatabase {
+
     private static volatile AppDatabase INSTANCE;
 
+    // DAO declarations
     public abstract UserDao userDao();
     public abstract PackageDao packageDao();
     public abstract FacilityDao facilityDao();
-
     public abstract MessageDao messageDao();
-
     public abstract CartDao cartDao();
     public abstract BookingDao bookingDao();
-
-
 
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -49,8 +56,8 @@ public abstract class AppDatabase extends RoomDatabase {
                                     context.getApplicationContext(),
                                     AppDatabase.class,
                                     "app_database"
-                            ).fallbackToDestructiveMigration() // Xóa dữ liệu cũ khi tăng version
-
+                            )
+                            .fallbackToDestructiveMigration()
                             .addCallback(new Callback() {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
