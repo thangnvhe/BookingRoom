@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
                 CartItem.class,
                 Booking.class
         },
-        version = 9, // Đảm bảo đây là version mới nhất bạn dùng
+        version = 10, // Đảm bảo đây là version mới nhất bạn dùng
         exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
