@@ -27,8 +27,8 @@ public class Booking {
 
     public int userId;
     public int packageId;
-
     public String amenities;
     public long timestamp; // Unix timestamp
     public String status;  // "confirmed", "cancelled"
+    public double totalPrice; // Thêm trường totalPrice
 }

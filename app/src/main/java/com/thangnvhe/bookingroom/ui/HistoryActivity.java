@@ -23,7 +23,6 @@ public class HistoryActivity extends AppCompatActivity {
     private RecyclerView recyclerHistory;
     private HistoryAdapter adapter;
     private BookingDao bookingDao;
-    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +44,25 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         new Thread(() -> {
-            userId = db.userDao().getUserByUsername(username).id;
+            int userId = db.userDao().getUserByUsername(username).id;
             List<Booking> bookings = bookingDao.getAll();
 
-            List<String> historyList = new ArrayList<>();
+            List<BookingDisplayItem> displayItems = new ArrayList<>();
             for (Booking booking : bookings) {
                 if (booking.userId == userId) {
-                    String date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                    String orderId = "Mã đơn: #" + booking.id;
+                    String orderDate = "Ngày đặt: " + new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                             .format(new Date(booking.timestamp));
-                    String item = "Gói #" + booking.packageId + " | " + booking.amenities + "\n" + date + " - Trạng thái: " + booking.status;
-                    historyList.add(item);
+                    String totalPrice = "Tổng tiền: " + booking.totalPrice + "đ";
+                    String amenities = booking.amenities;
+                    String status = booking.status;
+
+                    displayItems.add(new BookingDisplayItem(orderId, orderDate, totalPrice, amenities, status));
                 }
             }
 
             runOnUiThread(() -> {
-                adapter = new HistoryAdapter(historyList);
+                adapter = new HistoryAdapter(displayItems);
                 recyclerHistory.setAdapter(adapter);
             });
         }).start();
