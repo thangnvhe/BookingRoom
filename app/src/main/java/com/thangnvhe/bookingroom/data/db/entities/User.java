@@ -5,10 +5,8 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
 public class User {
-
     @PrimaryKey(autoGenerate = true)
     public int id;
-
     public String fullName;
     public String email;
     public String username;
@@ -17,9 +15,9 @@ public class User {
     public String gender;
     public String dob;
     public String address;
+    public String role; // Cột role để phân biệt user/seller
 
-    public User(String fullName, String email, String username, String password,
-                String phone, String gender, String dob, String address) {
+    public User(String fullName, String email, String username, String password, String phone, String gender, String dob, String address, String role) {
         this.fullName = fullName;
         this.email = email;
         this.username = username;
@@ -28,5 +26,6 @@ public class User {
         this.gender = gender;
         this.dob = dob;
         this.address = address;
+        this.role = role;
     }
 }

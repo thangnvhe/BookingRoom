@@ -21,10 +21,10 @@ import com.thangnvhe.bookingroom.R;
 import com.thangnvhe.bookingroom.data.db.entities.CartItem;
 import com.thangnvhe.bookingroom.ui.auth.LoginActivity;
 import com.thangnvhe.bookingroom.ui.auth.ProfileActivity;
-import com.thangnvhe.bookingroom.ui.map.MapActivity;
 import com.thangnvhe.bookingroom.ui.cart.CartActivity;
 import com.thangnvhe.bookingroom.ui.chat.ChatActivity;
 import com.thangnvhe.bookingroom.ui.chat.SellerChatListActivity;
+import com.thangnvhe.bookingroom.ui.map.MapActivity;
 import com.thangnvhe.bookingroom.ui.packages.PackagesListActivity;
 
 import java.util.List;
@@ -66,34 +66,25 @@ public class MainActivity extends AppCompatActivity {
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         checkCartItems(username);
 
-        LinearLayout lnHome = findViewById(R.id.ln_home);
-        lnHome.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, PackagesListActivity.class));
-        });
+        // Sự kiện click các mục trong trang chính
+        findViewById(R.id.ln_home).setOnClickListener(v ->
+                startActivity(new Intent(this, PackagesListActivity.class)));
 
-        CardView cardCart = findViewById(R.id.cardCart);
-        cardCart.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, CartActivity.class));
-        });
+        findViewById(R.id.cardCart).setOnClickListener(v ->
+                startActivity(new Intent(this, CartActivity.class)));
 
-        CardView cardHistory = findViewById(R.id.cardHistory);
-        cardHistory.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, HistoryActivity.class));
-        });
+        findViewById(R.id.cardHistory).setOnClickListener(v ->
+                startActivity(new Intent(this, HistoryActivity.class)));
 
-        CardView cardChat = findViewById(R.id.cardChat);
-        cardChat.setOnClickListener(v -> {
-            Intent intent = "seller".equals(userRole) ?
-                    new Intent(MainActivity.this, SellerChatListActivity.class)
-                    : new Intent(MainActivity.this, ChatActivity.class);
+        findViewById(R.id.cardChat).setOnClickListener(v -> {
+            Intent intent = "seller".equals(userRole)
+                    ? new Intent(this, SellerChatListActivity.class)
+                    : new Intent(this, ChatActivity.class);
             startActivity(intent);
         });
 
-        CardView cardMap = findViewById(R.id.cardMap);
-        cardMap.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(intent);
-        });
+        findViewById(R.id.cardMap).setOnClickListener(v ->
+                startActivity(new Intent(this, MapActivity.class)));
 
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
@@ -104,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 int userId = cartViewModel.getUserIdByUsername(username);
                 if (userId == -1) {
                     runOnUiThread(() ->
-                            Toast.makeText(this, "Lỗi: Không tìm thấy người dùng!", Toast.LENGTH_SHORT).show());
+                            Toast.makeText(this, "Không tìm thấy người dùng!", Toast.LENGTH_SHORT).show());
                     return;
                 }
 
@@ -122,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     private void showCartNotificationDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Thông báo giỏ hàng")
-                .setMessage("Có sản phẩm trong giỏ hàng, bạn vui lòng vào giỏ hàng để kiểm tra và mua sắm.")
+                .setMessage("Bạn có sản phẩm trong giỏ hàng, kiểm tra ngay?")
                 .setPositiveButton("Vào giỏ hàng", (dialog, which) -> {
                     startActivity(new Intent(MainActivity.this, CartActivity.class));
                     dialog.dismiss();
@@ -145,17 +136,17 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putBoolean(KEY_IS_LOGGED_IN, false).apply();
             Toast.makeText(this, "Đã đăng xuất!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
             return true;
         } else if (id == R.id.menu_settings) {
-            Toast.makeText(this, "Chức năng cài đặt sẽ được thêm sau!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chức năng cài đặt sẽ sớm ra mắt!", Toast.LENGTH_SHORT).show();
             return true;
         } else if (id == R.id.menu_cart) {
-            startActivity(new Intent(MainActivity.this, CartActivity.class));
+            startActivity(new Intent(this, CartActivity.class));
             return true;
         } else if (id == R.id.menu_profile) {
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            startActivity(new Intent(this, ProfileActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
