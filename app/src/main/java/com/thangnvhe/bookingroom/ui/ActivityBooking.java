@@ -1,6 +1,5 @@
 package com.thangnvhe.bookingroom.ui;
 
-
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,11 +34,20 @@ public class ActivityBooking extends AppCompatActivity {
         int packageId = getIntent().getIntExtra("packageId", -1);
         String amenities = getIntent().getStringExtra("amenities");
         String billDetails = getIntent().getStringExtra("billDetails");
-        String totalPrice = getIntent().getStringExtra("totalPrice");
+        String totalPriceStr = getIntent().getStringExtra("totalPrice");
 
         // Hiển thị dữ liệu hóa đơn lên giao diện
         tvBillDetails.setText(billDetails);
-        tvBillTotal.setText("Tổng cộng: " + totalPrice + " VNĐ");
+        tvBillTotal.setText("Tổng cộng: " + totalPriceStr + " VNĐ");
+
+        // Chuyển đổi totalPrice từ String sang double
+        double totalPrice;
+        try {
+            totalPrice = Double.parseDouble(totalPriceStr.replace(" VNĐ", ""));
+        } catch (NumberFormatException e) {
+            totalPrice = 0.0; // Giá trị mặc định nếu lỗi
+            Toast.makeText(this, "Lỗi định dạng giá tiền", Toast.LENGTH_SHORT).show();
+        }
 
         // Tạo đối tượng Booking để lưu vào Room DB
         Booking booking = new Booking();
@@ -48,6 +56,7 @@ public class ActivityBooking extends AppCompatActivity {
         booking.amenities = amenities;
         booking.timestamp = System.currentTimeMillis();
         booking.status = "confirmed";
+        booking.totalPrice = totalPrice; // Gán totalPrice
 
         // Lưu vào DB trong background thread
         Executors.newSingleThreadExecutor().execute(() -> {
