@@ -86,8 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         // Bắt sự kiện đăng ký
         TextView textViewRegister = findViewById(R.id.textViewRegister);
         textViewRegister.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
+            // Thay vì RegisterActivity.class
+            startActivity(new Intent(LoginActivity.this, RegisterActivityImproved.class));
         });
     }
 }

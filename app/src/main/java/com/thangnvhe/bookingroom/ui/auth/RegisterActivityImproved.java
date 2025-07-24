@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -16,15 +15,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.thangnvhe.bookingroom.R;
 import com.thangnvhe.bookingroom.data.db.entities.User;
 import com.thangnvhe.bookingroom.utils.ValidationUtils;
 import java.util.Calendar;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivityImproved extends AppCompatActivity {
 
     private UserViewModel userViewModel;
-    private EditText etFullName, etEmail, etUsername, etPassword, etPhone, etDob, etAddress;
+    private TextInputLayout tilFullName, tilEmail, tilUsername, tilPassword, tilPhone, tilDob, tilAddress;
+    private TextInputEditText etFullName, etEmail, etUsername, etPassword, etPhone, etDob, etAddress;
     private RadioGroup rgGender;
     private RadioButton rbMale, rbFemale;
 
@@ -32,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_register_improved);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -41,18 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // Ánh xạ view
-        etFullName = findViewById(R.id.etFullName);
-        etEmail = findViewById(R.id.etEmail);
-        etUsername = findViewById(R.id.etUsername);
-        etPassword = findViewById(R.id.etPassword);
-        etPhone = findViewById(R.id.etPhone);
-        etDob = findViewById(R.id.etDob);
-        etAddress = findViewById(R.id.etAddress);
-        rgGender = findViewById(R.id.rgGender);
-        rbMale = findViewById(R.id.rbMale);
-        rbFemale = findViewById(R.id.rbFemale);
-        Button btnRegister = findViewById(R.id.btnRegister);
-        Button btnBtoLogin = findViewById(R.id.btnBtoLogin);
+        initViews();
 
         // ViewModel
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -62,23 +53,10 @@ public class RegisterActivity extends AppCompatActivity {
         setupRealTimeValidation();
 
         // DatePicker cho ngày sinh
-        etDob.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    RegisterActivity.this,
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
-                        String dob = String.format("%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
-                        etDob.setText(dob);
-                    },
-                    year, month, day);
-            datePickerDialog.show();
-        });
+        setupDatePicker();
 
         // Bắt sự kiện đăng ký
+        Button btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(v -> {
             if (validateAllFields()) {
                 registerUser();
@@ -86,9 +64,53 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // Bắt sự kiện quay lại đăng nhập
+        Button btnBtoLogin = findViewById(R.id.btnBtoLogin);
         btnBtoLogin.setOnClickListener(v -> {
-            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            startActivity(new Intent(RegisterActivityImproved.this, LoginActivity.class));
             finish();
+        });
+    }
+
+    private void initViews() {
+        // TextInputLayouts
+        tilFullName = findViewById(R.id.tilFullName);
+        tilEmail = findViewById(R.id.tilEmail);
+        tilUsername = findViewById(R.id.tilUsername);
+        tilPassword = findViewById(R.id.tilPassword);
+        tilPhone = findViewById(R.id.tilPhone);
+        tilDob = findViewById(R.id.tilDob);
+        tilAddress = findViewById(R.id.tilAddress);
+
+        // EditTexts
+        etFullName = findViewById(R.id.etFullName);
+        etEmail = findViewById(R.id.etEmail);
+        etUsername = findViewById(R.id.etUsername);
+        etPassword = findViewById(R.id.etPassword);
+        etPhone = findViewById(R.id.etPhone);
+        etDob = findViewById(R.id.etDob);
+        etAddress = findViewById(R.id.etAddress);
+
+        // RadioGroup
+        rgGender = findViewById(R.id.rgGender);
+        rbMale = findViewById(R.id.rbMale);
+        rbFemale = findViewById(R.id.rbFemale);
+    }
+
+    private void setupDatePicker() {
+        etDob.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    RegisterActivityImproved.this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String dob = String.format("%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
+                        etDob.setText(dob);
+                    },
+                    year, month, day);
+            datePickerDialog.show();
         });
     }
 
@@ -105,10 +127,10 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 ValidationUtils.ValidationResult result = ValidationUtils.validateFullName(s.toString());
-                if (!result.isValid()) {
-                    etFullName.setError(result.getErrorMessage());
+                if (!result.isValid() && !s.toString().trim().isEmpty()) {
+                    tilFullName.setError(result.getErrorMessage());
                 } else {
-                    etFullName.setError(null);
+                    tilFullName.setError(null);
                 }
             }
         });
@@ -125,9 +147,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 ValidationUtils.ValidationResult result = ValidationUtils.validateEmail(s.toString());
                 if (!result.isValid() && !s.toString().trim().isEmpty()) {
-                    etEmail.setError(result.getErrorMessage());
+                    tilEmail.setError(result.getErrorMessage());
                 } else {
-                    etEmail.setError(null);
+                    tilEmail.setError(null);
                 }
             }
         });
@@ -144,9 +166,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 ValidationUtils.ValidationResult result = ValidationUtils.validateUsername(s.toString());
                 if (!result.isValid() && !s.toString().trim().isEmpty()) {
-                    etUsername.setError(result.getErrorMessage());
+                    tilUsername.setError(result.getErrorMessage());
                 } else {
-                    etUsername.setError(null);
+                    tilUsername.setError(null);
                 }
             }
         });
@@ -163,9 +185,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 ValidationUtils.ValidationResult result = ValidationUtils.validatePassword(s.toString());
                 if (!result.isValid() && !s.toString().trim().isEmpty()) {
-                    etPassword.setError(result.getErrorMessage());
+                    tilPassword.setError(result.getErrorMessage());
                 } else {
-                    etPassword.setError(null);
+                    tilPassword.setError(null);
                 }
             }
         });
@@ -182,9 +204,28 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 ValidationUtils.ValidationResult result = ValidationUtils.validatePhone(s.toString());
                 if (!result.isValid() && !s.toString().trim().isEmpty()) {
-                    etPhone.setError(result.getErrorMessage());
+                    tilPhone.setError(result.getErrorMessage());
                 } else {
-                    etPhone.setError(null);
+                    tilPhone.setError(null);
+                }
+            }
+        });
+
+        // Date of birth validation
+        etDob.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                ValidationUtils.ValidationResult result = ValidationUtils.validateDateOfBirth(s.toString());
+                if (!result.isValid() && !s.toString().trim().isEmpty()) {
+                    tilDob.setError(result.getErrorMessage());
+                } else {
+                    tilDob.setError(null);
                 }
             }
         });
@@ -201,9 +242,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 ValidationUtils.ValidationResult result = ValidationUtils.validateAddress(s.toString());
                 if (!result.isValid() && !s.toString().trim().isEmpty()) {
-                    etAddress.setError(result.getErrorMessage());
+                    tilAddress.setError(result.getErrorMessage());
                 } else {
-                    etAddress.setError(null);
+                    tilAddress.setError(null);
                 }
             }
         });
@@ -220,7 +261,7 @@ public class RegisterActivity extends AppCompatActivity {
         ValidationUtils.ValidationResult fullNameResult = ValidationUtils.validateFullName(
                 etFullName.getText().toString());
         if (!fullNameResult.isValid()) {
-            etFullName.setError(fullNameResult.getErrorMessage());
+            tilFullName.setError(fullNameResult.getErrorMessage());
             isValid = false;
         }
         
@@ -228,7 +269,7 @@ public class RegisterActivity extends AppCompatActivity {
         ValidationUtils.ValidationResult emailResult = ValidationUtils.validateEmail(
                 etEmail.getText().toString());
         if (!emailResult.isValid()) {
-            etEmail.setError(emailResult.getErrorMessage());
+            tilEmail.setError(emailResult.getErrorMessage());
             isValid = false;
         }
         
@@ -236,7 +277,7 @@ public class RegisterActivity extends AppCompatActivity {
         ValidationUtils.ValidationResult usernameResult = ValidationUtils.validateUsername(
                 etUsername.getText().toString());
         if (!usernameResult.isValid()) {
-            etUsername.setError(usernameResult.getErrorMessage());
+            tilUsername.setError(usernameResult.getErrorMessage());
             isValid = false;
         }
         
@@ -244,7 +285,7 @@ public class RegisterActivity extends AppCompatActivity {
         ValidationUtils.ValidationResult passwordResult = ValidationUtils.validatePassword(
                 etPassword.getText().toString());
         if (!passwordResult.isValid()) {
-            etPassword.setError(passwordResult.getErrorMessage());
+            tilPassword.setError(passwordResult.getErrorMessage());
             isValid = false;
         }
         
@@ -252,7 +293,7 @@ public class RegisterActivity extends AppCompatActivity {
         ValidationUtils.ValidationResult phoneResult = ValidationUtils.validatePhone(
                 etPhone.getText().toString());
         if (!phoneResult.isValid()) {
-            etPhone.setError(phoneResult.getErrorMessage());
+            tilPhone.setError(phoneResult.getErrorMessage());
             isValid = false;
         }
         
@@ -260,7 +301,7 @@ public class RegisterActivity extends AppCompatActivity {
         ValidationUtils.ValidationResult dobResult = ValidationUtils.validateDateOfBirth(
                 etDob.getText().toString());
         if (!dobResult.isValid()) {
-            etDob.setError(dobResult.getErrorMessage());
+            tilDob.setError(dobResult.getErrorMessage());
             isValid = false;
         }
         
@@ -268,7 +309,7 @@ public class RegisterActivity extends AppCompatActivity {
         ValidationUtils.ValidationResult addressResult = ValidationUtils.validateAddress(
                 etAddress.getText().toString());
         if (!addressResult.isValid()) {
-            etAddress.setError(addressResult.getErrorMessage());
+            tilAddress.setError(addressResult.getErrorMessage());
             isValid = false;
         }
         
@@ -281,13 +322,13 @@ public class RegisterActivity extends AppCompatActivity {
     
     // Phương thức xóa lỗi
     private void clearErrors() {
-        etFullName.setError(null);
-        etEmail.setError(null);
-        etUsername.setError(null);
-        etPassword.setError(null);
-        etPhone.setError(null);
-        etDob.setError(null);
-        etAddress.setError(null);
+        tilFullName.setError(null);
+        tilEmail.setError(null);
+        tilUsername.setError(null);
+        tilPassword.setError(null);
+        tilPhone.setError(null);
+        tilDob.setError(null);
+        tilAddress.setError(null);
     }
     
     // Phương thức đăng ký người dùng
@@ -305,7 +346,7 @@ public class RegisterActivity extends AppCompatActivity {
         User user = new User(fullName, email, username, password, phone, gender, dob, address, role);
         userViewModel.registerUser(user);
         Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+        startActivity(new Intent(RegisterActivityImproved.this, LoginActivity.class));
         finish();
     }
 }
