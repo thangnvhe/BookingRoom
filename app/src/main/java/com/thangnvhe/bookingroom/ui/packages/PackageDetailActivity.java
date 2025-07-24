@@ -46,6 +46,10 @@ public class PackageDetailActivity extends AppCompatActivity {
     private UserRepository userRepository;
     private static final String PREFS_NAME = "user_prefs";
     private static final String KEY_IS_USER_NAME = "is_user_name";
+    
+    // Thêm biến để lưu giá gốc và TextView giá
+    private double basePrice = 0.0;
+    private TextView priceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class PackageDetailActivity extends AppCompatActivity {
 
         TextView name = findViewById(R.id.productTitle);
         TextView capacity = findViewById(R.id.colorValue);
-        TextView price = findViewById(R.id.totalPrice);
+        priceTextView = findViewById(R.id.totalPrice); // Lưu reference để cập nhật sau
         TextView type = findViewById(R.id.brandValue);
         TextView description = findViewById(R.id.productDescription);
         TextView rating = findViewById(R.id.ratingText);
@@ -97,6 +101,19 @@ public class PackageDetailActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         facilitySpinner.setAdapter(spinnerAdapter);
 
+        // Thêm listener để cập nhật giá khi chọn tiện ích
+        facilitySpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, android.view.View view, int position, long id) {
+                updatePriceWithFacility();
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {
+                // Không làm gì
+            }
+        });
+
         toggleFacilityBtn.setOnClickListener(v -> {
             if (facilitySpinner.getVisibility() == View.GONE) {
                 facilitySpinner.setVisibility(View.VISIBLE);
@@ -109,7 +126,8 @@ public class PackageDetailActivity extends AppCompatActivity {
 
         name.setText(pkg.name);
         capacity.setText(pkg.capacity + " người");
-        price.setText(pkg.price + " VNĐ");
+        basePrice = pkg.price; // Lưu giá gốc
+        priceTextView.setText(String.format("%.0f VNĐ", basePrice)); // Hiển thị giá gốc
         type.setText(pkg.type);
         description.setText(pkg.description);
         rating.setText(pkg.rating + " Ratings");
@@ -223,5 +241,64 @@ public class PackageDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Cập nhật giá hiển thị khi người dùng chọn tiện ích
+     */
+    private void updatePriceWithFacility() {
+        new Thread(() -> {
+            try {
+                Spinner facilitySpinner = findViewById(R.id.facilitySpinner);
+                String selectedFacility = facilitySpinner.getSelectedItem() != null ? 
+                    facilitySpinner.getSelectedItem().toString() : null;
+                
+                double facilityPrice = 0.0;
+                
+                if (selectedFacility != null && 
+                    !selectedFacility.equals("Không có tiện ích kèm theo") && 
+                    !selectedFacility.equals("không chọn tiện ích (0)")) {
+                    
+                    try {
+                        // Extract facility ID from string like "Tên tiện ích (123)"
+                        String idStr = selectedFacility.substring(
+                            selectedFacility.lastIndexOf("(") + 1, 
+                            selectedFacility.lastIndexOf(")")
+                        );
+                        Integer facilityId = Integer.parseInt(idStr);
+                        
+                        // Lấy giá tiện ích từ database
+                        FacilityEntity facility = AppDatabase.getInstance(this).facilityDao()
+                                .getFacilityById(facilityId);
+                        if (facility != null) {
+                            facilityPrice = facility.extraPrice;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        facilityPrice = 0.0;
+                    }
+                }
+                
+                // Tính tổng giá và cập nhật UI
+                double totalPrice = basePrice + facilityPrice;
+                final double finalTotalPrice = totalPrice;
+                final double finalFacilityPrice = facilityPrice;
+                
+                runOnUiThread(() -> {
+                    if (finalFacilityPrice > 0) {
+                        priceTextView.setText(String.format("%.0f VNĐ (%.0f + %.0f)", 
+                            finalTotalPrice, basePrice, finalFacilityPrice));
+                    } else {
+                        priceTextView.setText(String.format("%.0f VNĐ", finalTotalPrice));
+                    }
+                });
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    priceTextView.setText(String.format("%.0f VNĐ", basePrice));
+                });
+            }
+        }).start();
     }
 }

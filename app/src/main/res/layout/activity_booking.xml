@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="8dp"
-                    android:text="Ngày: 13/07/2025"
+                    android:text="Ngày: 24/07/2025"
                     android:textColor="#757575"
                     android:textSize="14sp" />
             </LinearLayout>
