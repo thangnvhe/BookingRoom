@@ -26,13 +26,20 @@ public class UserViewModel extends ViewModel {
     // --- Đăng ký ---
     public void registerUser(User user) {
         new Thread(() -> {
-            User existing = repository.getUserByUsername(user.username);
-            if (existing != null) {
+            User existingUsername = repository.getUserByUsername(user.username);
+            if (existingUsername != null) {
                 registerResult.postValue("Tên đăng nhập đã tồn tại!");
-            } else {
-                repository.insertUser(user);
-                registerResult.postValue("Đăng ký thành công!");
+                return;
             }
+            
+            User existingEmail = repository.getUserByEmail(user.email);
+            if (existingEmail != null) {
+                registerResult.postValue("Email đã được sử dụng!");
+                return;
+            }
+            
+            repository.insertUser(user);
+            registerResult.postValue("Đăng ký thành công!");
         }).start();
     }
 

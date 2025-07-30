@@ -30,6 +30,10 @@ public class UserRepository {
         return userDao.getUserByUsername(username);
     }
 
+    public User getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
+    }
+
     public User getUserByUsernameAndPassword(String username, String password) {
         return userDao.getUserByUsernameAndPassword(username, password);
     }
