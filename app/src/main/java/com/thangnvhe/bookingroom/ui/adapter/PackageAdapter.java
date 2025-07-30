@@ -52,8 +52,8 @@ public class PackageAdapter extends RecyclerView.Adapter<PackageAdapter.PackageV
     public void onBindViewHolder(@NonNull PackageViewHolder holder, int position) {
         PackageWithFacilities item = packages.get(position);
         holder.name.setText(item.packageEntity.name);
-        holder.capacity.setText("Chỗ: " + item.packageEntity.capacity);
-        holder.price.setText(item.packageEntity.price + " VNĐ / Đêm");
+        holder.capacity.setText(item.packageEntity.capacity + " người");
+        holder.price.setText(String.format("%.0f VNĐ", item.packageEntity.price));
 
         // Load ảnh từ drawable theo imageUrl
         int imageResId = context.getResources().getIdentifier(

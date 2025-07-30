@@ -87,13 +87,19 @@ public class PackageDetailActivity extends AppCompatActivity {
         Spinner facilitySpinner = findViewById(R.id.facilitySpinner);
         Button addToCartButton = findViewById(R.id.addToCartButton);
 
+        // Luôn hiển thị spinner tiện ích
+        facilitySpinner.setVisibility(View.VISIBLE);
         toggleFacilityBtn.setVisibility(View.GONE);
-        facilitySpinner.setVisibility(View.GONE);
 
         ArrayList<String> facilities = getIntent().getStringArrayListExtra("facility_names");
         if (facilities == null || facilities.isEmpty()) {
             facilities = new ArrayList<>();
-            facilities.add("Không có tiện ích kèm theo");
+            facilities.add("Không có tiện ích đi kèm");
+        }
+
+        // Đảm bảo có option "Không có tiện ích đi kèm" ở đầu danh sách
+        if (!facilities.get(0).contains("không chọn tiện ích") && !facilities.get(0).equals("Không có tiện ích đi kèm")) {
+            facilities.add(0, "Không có tiện ích đi kèm");
         }
 
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
@@ -114,15 +120,7 @@ public class PackageDetailActivity extends AppCompatActivity {
             }
         });
 
-        toggleFacilityBtn.setOnClickListener(v -> {
-            if (facilitySpinner.getVisibility() == View.GONE) {
-                facilitySpinner.setVisibility(View.VISIBLE);
-                toggleFacilityBtn.setText("−");
-            } else {
-                facilitySpinner.setVisibility(View.GONE);
-                toggleFacilityBtn.setText("+");
-            }
-        });
+        // Loại bỏ listener cũ của toggleFacilityBtn vì không cần nữa
 
         name.setText(pkg.name);
         capacity.setText(pkg.capacity + " người");
@@ -131,6 +129,9 @@ public class PackageDetailActivity extends AppCompatActivity {
         type.setText(pkg.type);
         description.setText(pkg.description);
         rating.setText(pkg.rating + " Ratings");
+
+        // Cập nhật giá ngay khi load trang (với tiện ích mặc định)
+        updatePriceWithFacility();
 
         String imageName = pkg.imageUrl;
         int imageResId = getResources().getIdentifier(imageName, "drawable", getPackageName());
@@ -141,6 +142,7 @@ public class PackageDetailActivity extends AppCompatActivity {
         }
 
         FlexboxLayout timeSlotContainer = findViewById(R.id.timeSlotContainer);
+        TextView[] selectedChip = {null}; // Để lưu chip được chọn
         try {
             JSONArray timeArray = new JSONArray(pkg.availableTimeSlots);
             for (int i = 0; i < timeArray.length(); i++) {
@@ -148,7 +150,7 @@ public class PackageDetailActivity extends AppCompatActivity {
                 TextView chip = new TextView(this);
                 chip.setText(timeSlot);
                 chip.setTextSize(14);
-                chip.setTextColor(getResources().getColor(android.R.color.black));
+                chip.setTextColor(getResources().getColor(android.R.color.white));
                 chip.setBackgroundResource(R.drawable.bg_time_slot);
                 chip.setPadding(32, 16, 32, 16);
 
@@ -159,19 +161,31 @@ public class PackageDetailActivity extends AppCompatActivity {
                 chip.setLayoutParams(params);
 
                 chip.setOnClickListener(v -> {
+                    // Reset chip trước đó
                     if (selectedChip[0] != null) {
                         selectedChip[0].setBackgroundResource(R.drawable.bg_time_slot);
+                        selectedChip[0].setTextColor(getResources().getColor(android.R.color.white));
                     }
+                    // Set chip hiện tại
                     chip.setBackgroundResource(R.drawable.bg_time_slot_selected);
+                    chip.setTextColor(getResources().getColor(android.R.color.black));
                     selectedChip[0] = chip;
-                    toggleFacilityBtn.setVisibility(View.VISIBLE);
+                    this.selectedChip[0] = chip; // Cập nhật biến instance
                 });
 
                 timeSlotContainer.addView(chip);
+                
+                // Chọn slot đầu tiên mặc định
+                if (i == 0) {
+                    chip.setBackgroundResource(R.drawable.bg_time_slot_selected);
+                    chip.setTextColor(getResources().getColor(android.R.color.black));
+                    selectedChip[0] = chip;
+                    this.selectedChip[0] = chip; // Cập nhật biến instance
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            availableTime.setText("Không có thời gian khả dụng");
+            // availableTime.setText("Không có thời gian khả dụng");
         }
 
         addToCartButton.setOnClickListener(v -> {
@@ -201,7 +215,9 @@ public class PackageDetailActivity extends AppCompatActivity {
                     String selectedFacility = facilitySpinner.getSelectedItem() != null ? facilitySpinner.getSelectedItem().toString() : null;
                     Integer facilityId = null;
                     double facilityPrice = 0.0;
-                    if (selectedFacility != null && !selectedFacility.equals("Không có tiện ích kèm theo") && !selectedFacility.equals("không chọn tiện ích (0)")) {
+                    if (selectedFacility != null && 
+                        !selectedFacility.equals("Không có tiện ích đi kèm") && 
+                        !selectedFacility.equals("không chọn tiện ích (0)")) {
                         try {
                             String idStr = selectedFacility.substring(selectedFacility.lastIndexOf("(") + 1, selectedFacility.lastIndexOf(")"));
                             facilityId = Integer.parseInt(idStr);
@@ -256,7 +272,7 @@ public class PackageDetailActivity extends AppCompatActivity {
                 double facilityPrice = 0.0;
                 
                 if (selectedFacility != null && 
-                    !selectedFacility.equals("Không có tiện ích kèm theo") && 
+                    !selectedFacility.equals("Không có tiện ích đi kèm") && 
                     !selectedFacility.equals("không chọn tiện ích (0)")) {
                     
                     try {

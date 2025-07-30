@@ -2,6 +2,7 @@
 <!-- res/drawable/bg_time_slot_selected.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="#4CAF50"/> <!-- Màu xanh khi chọn -->
-    <corners android:radius="16dp"/>
+    <solid android:color="#FFC107"/> <!-- Màu vàng khi chọn -->
+    <corners android:radius="20dp"/>
+    <stroke android:width="2dp" android:color="#FF9800"/>
 </shape>

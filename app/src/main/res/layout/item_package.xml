@@ -3,65 +3,113 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:background="@android:color/white">
 
-        <LinearLayout
+        <!-- Hình ảnh với overlay gradient -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_height="200dp">
 
             <ImageView
                 android:id="@+id/packageImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_nu"
-                android:layout_marginEnd="8dp"
                 android:contentDescription="Package Image" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_overlay" />
 
-                <TextView
-                    android:id="@+id/packageTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tên Gói Du Lịch Hấp Dẫn"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/black" />
+            <!-- Giá nổi bật trên hình -->
+            <TextView
+                android:id="@+id/packagePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                android:background="@drawable/price_tag_bg"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="1.200.000 VNĐ"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:elevation="2dp" />
+
+        </FrameLayout>
+
+        <!-- Nội dung -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/packageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên Gói Du Lịch Hấp Dẫn"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_person"
+                    android:layout_marginEnd="4dp"
+                    android:tint="#666666" />
 
                 <TextView
                     android:id="@+id/packageCapacity"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="2 Người Lớn, 1 Trẻ Em"
+                    android:text="2 Người"
                     android:textSize="14sp"
-                    android:layout_marginTop="4dp" />
+                    android:textColor="#666666" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_star"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:tint="#FFA000" />
 
                 <TextView
-                    android:id="@+id/packagePrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1.200.000 VNĐ / Đêm"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#3F51B5"
-                    android:layout_marginTop="4dp" />
+                    android:text="4.5"
+                    android:textSize="14sp"
+                    android:textColor="#FFA000"
+                    android:textStyle="bold" />
 
             </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

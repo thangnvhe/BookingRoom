@@ -49,6 +49,20 @@ public class RegisterActivityImproved extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.init(getApplicationContext());
 
+        // Observe kết quả đăng ký
+        userViewModel.getRegisterResult().observe(this, result -> {
+            if (result != null) {
+                if (result.equals("Đăng ký thành công!")) {
+                    Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RegisterActivityImproved.this, LoginActivity.class));
+                    finish();
+                } else {
+                    // Hiển thị lỗi và ở lại trang register
+                    Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         // Thiết lập validation real-time
         setupRealTimeValidation();
 
@@ -345,8 +359,5 @@ public class RegisterActivityImproved extends AppCompatActivity {
 
         User user = new User(fullName, email, username, password, phone, gender, dob, address, role);
         userViewModel.registerUser(user);
-        Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(RegisterActivityImproved.this, LoginActivity.class));
-        finish();
     }
 }
